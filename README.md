@@ -2,11 +2,10 @@
 
 timegm(3) implementation for platforms that don't have it (AIX is an example)
 
-Type 'time_t' of the platform can be 32 or 64-bit long,
-but type 'long long' has to be 64-bit long (or more).
+This is forked off https://github.com/lzsiga/timegm, but with some changes:
 
-Invalid dates (eg 2021.02.29) return -1, but this can be changed in the
-future (so don't use this as a validator function).
-
-Supported range for 64-bit time_t: 0-9999 years (might be increased later)
-mind you, it is proleptic Gregorian (https://en.wikipedia.org/wiki/Proleptic_Gregorian_calendar)
+* Written for C++14 or later, using constexprs where appropriate.
+* Uses [days_from_civil](https://howardhinnant.github.io/date_algorithms.html#days_from_civil) as a better day calculation without an arbitrary minimal date, allowing arbitrary year and date representation filling the entire int range.
+* Added small randomized test suite comparing to the linux timegm.
+* Added a const-taking variant that works as a constexpr function.
+* Handle leap seconds on input.
